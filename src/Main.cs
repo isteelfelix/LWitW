@@ -40,6 +40,7 @@ namespace LWitWMod
         // Example postfix patch for localization
         public static void GetStringPostfix(ref string __result, string key)
         {
+            MelonLogger.Msg($"Localization key requested: {key}");
             if (translations.TryGetValue(key, out string translated))
             {
                 __result = translated;
