@@ -1,40 +1,53 @@
 using MelonLoader;
 using UnityEngine;
+using HarmonyLib;
 using System.Reflection;
 using System.IO;
-using System.Linq;
+using System.Collections.Generic;
+using System.Text.Json;
 
 [assembly: MelonInfo(typeof(LWitWMod.Main), "LWitWMod", "1.0.0", "YourName")]
-[assembly: MelonGame("Akinori", "Little Witch in the Woods")] // Replace with actual game details
+[assembly: MelonGame("Akinori", "Little Witch in the Woods")]
 
 namespace LWitWMod
 {
     public class Main : MelonMod
     {
+        private static Harmony HarmonyInstance;
+        private static Dictionary<string, string> translations = new();
+
         public override void OnInitializeMelon()
         {
             LoggerInstance.Msg("LWitWMod loaded!");
 
-            // Load embedded JSON resources
-            var assembly = Assembly.GetExecutingAssembly();
-            var resourceNames = assembly.GetManifestResourceNames().Where(name => name.Contains("res.") && name.EndsWith(".json"));
-            foreach (var resourceName in resourceNames)
+            // Load ru.json from Mods folder
+            string modPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string ruJsonPath = Path.Combine(modPath, "ru.json");
+            if (File.Exists(ruJsonPath))
             {
-                using (var stream = assembly.GetManifestResourceStream(resourceName))
-                {
-                    if (stream != null)
-                    {
-                        using (var reader = new StreamReader(stream))
-                        {
-                            var json = reader.ReadToEnd();
-                            LoggerInstance.Msg($"Loaded resource: {resourceName}, Length: {json.Length}");
-                            // Here you can parse the JSON and apply modifications to the game
-                        }
-                    }
-                }
+                string json = File.ReadAllText(ruJsonPath);
+                translations = JsonSerializer.Deserialize<Dictionary<string, string>>(json) ?? new();
+                LoggerInstance.Msg($"Loaded {translations.Count} translations from ru.json");
             }
+            else
+            {
+                LoggerInstance.Msg("ru.json not found in Mods folder");
+            }
+
+            // Initialize Harmony
+            HarmonyInstance = new Harmony("LWitWMod");
+
+            // TODO: Patch localization methods
+            // Example: Patch(typeof(LocalizationManager).GetMethod("GetString"), new HarmonyMethod(typeof(Main).GetMethod("GetStringPostfix")));
         }
 
-        // Add your mod logic here
+        // Example postfix patch for localization
+        public static void GetStringPostfix(ref string __result, string key)
+        {
+            if (translations.TryGetValue(key, out string translated))
+            {
+                __result = translated;
+            }
+        }
     }
 }
