@@ -21,6 +21,12 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>E:\Steam\steamapps\common\Little Witch in the Woods\MelonLoader\net35\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>E:\Steam\steamapps\common\Little Witch in the Woods\LWIW_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>E:\Steam\steamapps\common\Little Witch in the Woods\LWIW_Data\Managed\UnityEngine.UI.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Copy SourceFiles="$(TargetPath)" DestinationFolder="E:\Steam\steamapps\common\Little Witch in the Woods\Mods\" />

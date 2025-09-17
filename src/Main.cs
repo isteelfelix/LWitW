@@ -5,6 +5,8 @@ using System.Reflection;
 using System.IO;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using TMPro;
+using UnityEngine.UI;
 
 [assembly: MelonInfo(typeof(LWitWMod.Main), "LWitWMod", "1.0.0", "Chieftain51")]
 [assembly: MelonGame("SunnySideUp", "Little Witch In The Woods")]
@@ -13,7 +15,7 @@ namespace LWitWMod
 {
     public class Main : MelonMod
     {
-        private static Dictionary<string, string> translations = new();
+        internal static Translation Translation;
 
         public override void OnInitializeMelon()
         {
@@ -22,30 +24,78 @@ namespace LWitWMod
             // Load ru.json from Mods folder
             string modPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             string ruJsonPath = Path.Combine(modPath, "ru.json");
-            if (File.Exists(ruJsonPath))
-            {
-                string json = File.ReadAllText(ruJsonPath);
-                translations = JsonConvert.DeserializeObject<Dictionary<string, string>>(json) ?? new Dictionary<string, string>();
-                LoggerInstance.Msg($"Loaded {translations.Count} translations from ru.json");
-            }
-            else
-            {
-                LoggerInstance.Msg("ru.json not found in Mods folder");
-            }
+            Translation = new Translation(ruJsonPath);
 
-            // TODO: Patch localization methods using HarmonyInstance
-            // Example: HarmonyInstance.Patch(typeof(SomeClass).GetMethod("GetString"), new HarmonyMethod(typeof(Main).GetMethod("GetStringPostfix")));
+            LoggerInstance.Msg($"Loaded translations: {Translation.Count} entries");
+
+            // Harmony patches will be applied automatically via [HarmonyPatch]
+        }
+    }
+
+    // TMP_Text.SetText(string)
+    [HarmonyPatch(typeof(TMP_Text), nameof(TMP_Text.SetText), new System.Type[] { typeof(string) })]
+    internal static class Patch_TMP_SetText_1
+    {
+        static void Prefix([HarmonyArgument("sourceText")] ref string txt)
+        {
+            if (Main.Translation.TryTranslate(txt, out var tr))
+                txt = tr;
+        }
+    }
+
+    // TMP_Text.SetText(string, bool)
+    [HarmonyPatch]
+    internal static class Patch_TMP_SetText_2
+    {
+        static MethodBase TargetMethod()
+        {
+            return typeof(TMP_Text).GetMethod(
+                "SetText",
+                BindingFlags.Instance | BindingFlags.Public,
+                null,
+                new System.Type[] { typeof(string), typeof(bool) },
+                null
+            );
         }
 
-        // Example postfix patch for localization
-        public static void GetStringPostfix(ref string __result, string key)
+        static void Prefix([HarmonyArgument("sourceText")] ref string txt)
         {
-            MelonLogger.Msg($"Localization key requested: {key}");
-            if (translations.TryGetValue(key, out string translated))
-            {
-                __result = translated;
-                MelonLogger.Msg($"Translated: {key} -> {translated}");
-            }
+            if (Main.Translation.TryTranslate(txt, out var tr))
+                txt = tr;
+        }
+    }
+
+    // TMP_Text.text setter
+    [HarmonyPatch]
+    internal static class Patch_TMP_set_text
+    {
+        static MethodBase TargetMethod()
+        {
+            var prop = typeof(TMP_Text).GetProperty("text", BindingFlags.Instance | BindingFlags.Public);
+            return prop?.GetSetMethod();
+        }
+
+        static void Prefix(ref string value)
+        {
+            if (Main.Translation.TryTranslate(value, out var tr))
+                value = tr;
+        }
+    }
+
+    // UnityEngine.UI.Text.text setter
+    [HarmonyPatch]
+    internal static class Patch_UIText_set_text
+    {
+        static MethodBase TargetMethod()
+        {
+            var prop = typeof(Text).GetProperty("text", BindingFlags.Instance | BindingFlags.Public);
+            return prop?.GetSetMethod();
+        }
+
+        static void Prefix(ref string value)
+        {
+            if (Main.Translation.TryTranslate(value, out var tr))
+                value = tr;
         }
     }
 }
