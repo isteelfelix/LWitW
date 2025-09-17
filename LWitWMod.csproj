@@ -10,15 +10,17 @@
   <ItemGroup>
     <!-- Add references to MelonLoader and UnityEngine DLLs here -->
     <Reference Include="MelonLoader">
-      <HintPath>E:\Steam\steamapps\common\Little Witch in the Woods\MelonLoader\Managed\MelonLoader.dll</HintPath>
+      <HintPath>E:\Steam\steamapps\common\Little Witch in the Woods\MelonLoader\net35\MelonLoader.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>E:\Steam\steamapps\common\Little Witch in the Woods\MelonLoader\Managed\UnityEngine.dll</HintPath>
+      <HintPath>E:\Steam\steamapps\common\Little Witch in the Woods\LWIW_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="0Harmony">
-      <HintPath>E:\Steam\steamapps\common\Little Witch in the Woods\MelonLoader\Managed\0Harmony.dll</HintPath>
+      <HintPath>E:\Steam\steamapps\common\Little Witch in the Woods\MelonLoader\net35\0Harmony.dll</HintPath>
     </Reference>
-    <Reference Include="System.Text.Json" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>E:\Steam\steamapps\common\Little Witch in the Woods\MelonLoader\net35\Newtonsoft.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Copy SourceFiles="$(TargetPath)" DestinationFolder="E:\Steam\steamapps\common\Little Witch in the Woods\Mods\" />
