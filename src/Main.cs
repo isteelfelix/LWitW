@@ -33,50 +33,6 @@ namespace LWitWMod
         }
     }
 
-    // TMP_Text.SetText(string)
-    [HarmonyPatch]
-    internal static class Patch_TMP_SetText_1
-    {
-        static MethodBase TargetMethod()
-        {
-            return typeof(TMP_Text).GetMethod(
-                "SetText",
-                BindingFlags.Instance | BindingFlags.Public,
-                null,
-                new Type[] { typeof(string) },
-                null
-            );
-        }
-
-        static void Prefix([HarmonyArgument("sourceText")] ref string txt)
-        {
-            if (Main.Translation.TryTranslate(txt, out var tr))
-                txt = tr;
-        }
-    }
-
-    // TMP_Text.SetText(string, bool)
-    [HarmonyPatch]
-    internal static class Patch_TMP_SetText_2
-    {
-        static MethodBase TargetMethod()
-        {
-            return typeof(TMP_Text).GetMethod(
-                "SetText",
-                BindingFlags.Instance | BindingFlags.Public,
-                null,
-                new System.Type[] { typeof(string), typeof(bool) },
-                null
-            );
-        }
-
-        static void Prefix([HarmonyArgument("sourceText")] ref string txt)
-        {
-            if (Main.Translation.TryTranslate(txt, out var tr))
-                txt = tr;
-        }
-    }
-
     // TMP_Text.text setter
     [HarmonyPatch]
     internal static class Patch_TMP_set_text
