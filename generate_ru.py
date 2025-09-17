@@ -37,7 +37,8 @@ def main():
     translations = {text: "" for text in sorted(filtered_strings)}
 
     # Write to ru.json
-    with open('ru.json', 'w', encoding='utf-8') as f:
+    os.makedirs('ru', exist_ok=True)
+    with open('ru/ru.json', 'w', encoding='utf-8') as f:
         json.dump(translations, f, ensure_ascii=False, indent=4)
 
     print(f"Generated ru.json with {len(translations)} entries")
