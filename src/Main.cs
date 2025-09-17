@@ -1,6 +1,7 @@
 using MelonLoader;
 using UnityEngine;
 using HarmonyLib;
+using System;
 using System.Reflection;
 using System.IO;
 using System.Collections.Generic;
@@ -33,9 +34,20 @@ namespace LWitWMod
     }
 
     // TMP_Text.SetText(string)
-    [HarmonyPatch(typeof(TMP_Text), nameof(TMP_Text.SetText), new System.Type[] { typeof(string) })]
+    [HarmonyPatch]
     internal static class Patch_TMP_SetText_1
     {
+        static MethodBase TargetMethod()
+        {
+            return typeof(TMP_Text).GetMethod(
+                "SetText",
+                BindingFlags.Instance | BindingFlags.Public,
+                null,
+                new Type[] { typeof(string) },
+                null
+            );
+        }
+
         static void Prefix([HarmonyArgument("sourceText")] ref string txt)
         {
             if (Main.Translation.TryTranslate(txt, out var tr))
