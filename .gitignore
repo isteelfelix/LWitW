@@ -1,0 +1,22 @@
+# Binaries
+bin/
+obj/
+
+# Unity
+Library/
+Temp/
+*.log
+*.cache
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Mod files
+Mods/
+Plugins/
