@@ -15,6 +15,9 @@
     <Reference Include="UnityEngine">
       <HintPath>E:\Steam\steamapps\common\Little Witch in the Woods\LWIW_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>E:\Steam\steamapps\common\Little Witch in the Woods\LWIW_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
     <Reference Include="0Harmony">
       <HintPath>E:\Steam\steamapps\common\Little Witch in the Woods\MelonLoader\net35\0Harmony.dll</HintPath>
     </Reference>
