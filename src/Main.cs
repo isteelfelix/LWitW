@@ -1,19 +1,18 @@
 using MelonLoader;
-using UnityEngine;            // TODO: Patch localization methods using HarmonyInstance
-            // Example: HarmonyInstance.Patch(typeof(SomeClass).GetMethod("GetString"), new HarmonyMethod(typeof(Main).GetMethod("GetStringPostfix")));sing HarmonyLib;
+using UnityEngine;
+using HarmonyLib;
 using System.Reflection;
 using System.IO;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-[assembly: MelonInfo(typeof(LWitWMod.Main), "LWitWMod", "1.0.0", "YourName")]
+[assembly: MelonInfo(typeof(LWitWMod.Main), "LWitWMod", "1.0.0", "Chieftain51")]
 [assembly: MelonGame("SunnySideUp", "Little Witch In The Woods")]
 
 namespace LWitWMod
 {
     public class Main : MelonMod
     {
-        // private static HarmonyLib.Harmony HarmonyInstance;
         private static Dictionary<string, string> translations = new();
 
         public override void OnInitializeMelon()
@@ -34,11 +33,8 @@ namespace LWitWMod
                 LoggerInstance.Msg("ru.json not found in Mods folder");
             }
 
-            // Initialize Harmony
-            // HarmonyInstance = new HarmonyLib.Harmony("LWitWMod");
-
-            // TODO: Patch localization methods
-            // Example: Patch(typeof(LocalizationManager).GetMethod("GetString"), new HarmonyMethod(typeof(Main).GetMethod("GetStringPostfix")));
+            // TODO: Patch localization methods using HarmonyInstance
+            // Example: HarmonyInstance.Patch(typeof(SomeClass).GetMethod("GetString"), new HarmonyMethod(typeof(Main).GetMethod("GetStringPostfix")));
         }
 
         // Example postfix patch for localization
@@ -47,6 +43,7 @@ namespace LWitWMod
             if (translations.TryGetValue(key, out string translated))
             {
                 __result = translated;
+                MelonLogger.Msg($"Translated: {key} -> {translated}");
             }
         }
     }
