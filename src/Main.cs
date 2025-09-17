@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 
 [assembly: MelonInfo(typeof(LWitWMod.Main), "LWitWMod", "1.0.0", "YourName")]
-[assembly: MelonGame("Akinori", "Little Witch in the Woods")]
+[assembly: MelonGame("SunnySideUp", "Little Witch In The Woods")]
 
 namespace LWitWMod
 {
