@@ -9,14 +9,13 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- Add references to MelonLoader and UnityEngine DLLs here -->
-    <!-- Example:
     <Reference Include="MelonLoader">
-      <HintPath>$(MelonLoaderDir)\MelonLoader.dll</HintPath>
+      <HintPath>E:\Steam\steamapps\common\Little Witch in the Woods\MelonLoader\Managed\MelonLoader.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>$(UnityGameDir)\UnityEngine.dll</HintPath>
+      <HintPath>E:\Steam\steamapps\common\Little Witch in the Woods\MelonLoader\Managed\UnityEngine.dll</HintPath>
     </Reference>
-    -->
+    <EmbeddedResource Include="res\*.json" />
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Copy SourceFiles="$(TargetPath)" DestinationFolder="E:\Steam\steamapps\common\Little Witch in the Woods\Mods\" />
