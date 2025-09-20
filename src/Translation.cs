@@ -13,7 +13,7 @@ namespace LWitWMod
         // ===== ЛОГИ =====
         public static bool LogMissesToConsole = false;
         private readonly HashSet<string> _sessionMisses = new(StringComparer.Ordinal);
-        private readonly HashSet<string> _missFileCache = new(StringComparer.Ordinal);
+        private readonly Dictionary<string, string> _missFileCache = new(StringComparer.Ordinal);
 
         // ===== ХРАНИЛКИ =====
         private readonly Dictionary<string, string> _byText = new(StringComparer.Ordinal);
@@ -36,15 +36,19 @@ namespace LWitWMod
         public Translation(string path)
         {
             _path = path;
-            _missLog = Path.Combine(Path.GetDirectoryName(_path) ?? ".", "misses.txt");
+            _missLog = Path.Combine(Path.GetDirectoryName(_path) ?? ".", "misses.json");
 
             try
             {
                 if (File.Exists(_missLog))
                 {
-                    foreach (var line in File.ReadAllLines(_missLog))
-                        if (!string.IsNullOrWhiteSpace(line))
-                            _missFileCache.Add(line);
+                    var json = File.ReadAllText(_missLog, Encoding.UTF8);
+                    var dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+                    if (dict != null)
+                    {
+                        foreach (var kv in dict)
+                            _missFileCache[kv.Key] = kv.Value;
+                    }
                 }
             }
             catch { /* ignore */ }
@@ -138,7 +142,8 @@ namespace LWitWMod
                 {
                     var key = kv.Key;
                     var val = kv.Value;
-                    if (IsNullish(val)) continue;
+                    if (IsNullish(val))
+                        val = key; // использовать оригинальный текст для пустых переводов
 
                     bool hasPlaceholders = PlaceholderRx.IsMatch(key);
                     string keyNorm = Normalize(key);
@@ -288,18 +293,21 @@ namespace LWitWMod
             }
 
             // 4) Тихая фиксация промаха
-            //try
-            //{
-            //    if (_missFileCache.Count < 10000 && _missFileCache.Add(src))
-            //    {
-            //        using var writer = File.AppendText(_missLog);
-            //        writer.WriteLine(src);
-            //    }
-            //}
-            //catch { /* ignore */ }
+            try
+            {
+                // Не логировать строки, которые уже содержат русские буквы
+                bool hasRussian = Regex.IsMatch(srcNorm, @"[а-яё]", RegexOptions.IgnoreCase);
+                if (_missFileCache.Count < 10000 && !hasRussian && !_missFileCache.ContainsKey(srcNorm))
+                {
+                    _missFileCache[srcNorm] = "";
+                    var json = JsonConvert.SerializeObject(_missFileCache, Formatting.Indented);
+                    File.WriteAllText(_missLog, json, Encoding.UTF8);
+                }
+            }
+            catch { /* ignore */ }
 
-            //if (LogMissesToConsole && _sessionMisses.Add(src))
-            //    MelonLogger.Msg($"[Translate] MISS: '{src}'");
+            if (LogMissesToConsole && _sessionMisses.Add(src))
+                MelonLogger.Msg($"[Translate] MISS: '{src}'");
 
             return false;
         }
