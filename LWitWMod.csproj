@@ -27,8 +27,14 @@
     <Reference Include="Unity.TextMeshPro">
       <HintPath>E:\Steam\steamapps\common\Little Witch in the Woods\LWIW_Data\Managed\Unity.TextMeshPro.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>E:\Steam\steamapps\common\Little Witch in the Woods\LWIW_Data\Managed\UnityEngine.UI.dll</HintPath>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>E:\Steam\steamapps\common\Little Witch in the Woods\LWIW_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TextCoreFontEngineModule">
+      <HintPath>E:\Steam\steamapps\common\Little Witch in the Woods\LWIW_Data\Managed\UnityEngine.TextCoreFontEngineModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.AssetBundleModule">
+      <HintPath>E:\Steam\steamapps\common\Little Witch in the Woods\LWIW_Data\Managed\UnityEngine.AssetBundleModule.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
