@@ -5633,7 +5633,7 @@
     "Remove the Giant Prickly Vines": "Удалить гигантские колючие лозы",
     "Begone, Prickly Vines by the Lake": "Прочь, колючие лозы у озера",
     "Repairing the Processing Tools": "Ремонт обрабатывающих инструментов",
-    "The Truth Remains One!": "Правда остается одной!",
+    "The Truth Remains One!": "Правда остается правдой!",
     "Overly Imaginative Passenger": "Слишком фантазирующий пассажир",
     "Drawing With Your Quill": "Рисование вашим пером",
     "Sorry, you can't go beyond here.": "Извините, вы не можете пройти дальше.",
@@ -5656,5 +5656,11 @@
     "Oh, geez.": "О, боже.",
     "How long will this take?": "Как долго это займет?",
     "If we can take care of it on our own, it shouldn't take long.": "Если мы сможем справиться с этим сами, это не должно занять много времени.",
-    "But it might take some time if it is a problem that we can't solve.": "Но это может занять некоторое время, если это проблема, которую мы не можем решить."
+    "But it might take some time if it is a problem that we can't solve.": "Но это может занять некоторое время, если это проблема, которую мы не можем решить.",
+    "<color=#ff0000>1. Find the shining tree</color>": "<color=#ff0000>1. Найти сияющее дерево</color>",
+    "<color=#8C8C8C>1. Talk to people</color>": "<color=#8C8C8C>1. Поговорить с людьми</color>",
+    "<color=#8C8C8C>2. Return to your location</color>": "<color=#8C8C8C>2. Вернуться на свое место</color>",
+    "0-1. The Truth Remains One!": "0-1. Правда остается правдой!",
+    "0-2. A Shining Tree": "0-2. Найти сияющее дерево",
+    "Empty.": "Пусто."
 }   
