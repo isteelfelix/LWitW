@@ -10,37 +10,37 @@
   <ItemGroup>
     <!-- Add references to MelonLoader and UnityEngine DLLs here -->
     <Reference Include="MelonLoader">
-      <HintPath>E:\Steam\steamapps\common\Little Witch in the Woods\MelonLoader\net35\MelonLoader.dll</HintPath>
+      <HintPath>D:\Steam\steamapps\common\Little Witch in the Woods\MelonLoader\net35\MelonLoader.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>E:\Steam\steamapps\common\Little Witch in the Woods\LWIW_Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>D:\Steam\steamapps\common\Little Witch in the Woods\LWIW_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>E:\Steam\steamapps\common\Little Witch in the Woods\LWIW_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>D:\Steam\steamapps\common\Little Witch in the Woods\LWIW_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
     <Reference Include="0Harmony">
-      <HintPath>E:\Steam\steamapps\common\Little Witch in the Woods\MelonLoader\net35\0Harmony.dll</HintPath>
+      <HintPath>D:\Steam\steamapps\common\Little Witch in the Woods\MelonLoader\net35\0Harmony.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>E:\Steam\steamapps\common\Little Witch in the Woods\MelonLoader\net35\Newtonsoft.Json.dll</HintPath>
+      <HintPath>D:\Steam\steamapps\common\Little Witch in the Woods\MelonLoader\net35\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
-      <HintPath>E:\Steam\steamapps\common\Little Witch in the Woods\LWIW_Data\Managed\Unity.TextMeshPro.dll</HintPath>
+      <HintPath>D:\Steam\steamapps\common\Little Witch in the Woods\LWIW_Data\Managed\Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.TextRenderingModule">
-      <HintPath>E:\Steam\steamapps\common\Little Witch in the Woods\LWIW_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+      <HintPath>D:\Steam\steamapps\common\Little Witch in the Woods\LWIW_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.TextCoreFontEngineModule">
-      <HintPath>E:\Steam\steamapps\common\Little Witch in the Woods\LWIW_Data\Managed\UnityEngine.TextCoreFontEngineModule.dll</HintPath>
+      <HintPath>D:\Steam\steamapps\common\Little Witch in the Woods\LWIW_Data\Managed\UnityEngine.TextCoreFontEngineModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AssetBundleModule">
-      <HintPath>E:\Steam\steamapps\common\Little Witch in the Woods\LWIW_Data\Managed\UnityEngine.AssetBundleModule.dll</HintPath>
+      <HintPath>D:\Steam\steamapps\common\Little Witch in the Woods\LWIW_Data\Managed\UnityEngine.AssetBundleModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>E:\Steam\steamapps\common\Little Witch in the Woods\LWIW_Data\Managed\UnityEngine.UI.dll</HintPath>
+      <HintPath>D:\Steam\steamapps\common\Little Witch in the Woods\LWIW_Data\Managed\UnityEngine.UI.dll</HintPath>
     </Reference>
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Copy SourceFiles="$(TargetPath)" DestinationFolder="E:\Steam\steamapps\common\Little Witch in the Woods\Mods\" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="D:\Steam\steamapps\common\Little Witch in the Woods\Mods\" />
   </Target>
 </Project>

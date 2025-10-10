@@ -3,11 +3,14 @@ import os
 from collections import defaultdict
 
 def extract_strings(obj, strings):
-    if isinstance(obj, str):
-        strings.add(obj)
-    elif isinstance(obj, dict):
-        for value in obj.values():
-            extract_strings(value, strings)
+    if isinstance(obj, dict):
+        if "title" in obj and "value" in obj and isinstance(obj["value"], str):
+            title = obj["title"]
+            if "en" in title and not any(lang in title for lang in ["ko", "zh", "ja"]):
+                strings.add(obj["value"])
+        else:
+            for value in obj.values():
+                extract_strings(value, strings)
     elif isinstance(obj, list):
         for item in obj:
             extract_strings(item, strings)
@@ -33,15 +36,28 @@ def main():
     # Filter strings: remove empty, very short, or non-text
     filtered_strings = {s for s in all_strings if s and len(s) > 1 and not s.isdigit()}
 
-    # Create translations dict with empty values
-    translations = {text: "" for text in sorted(filtered_strings)}
+    # Read existing ru.json if it exists
+    existing_translations = {}
+    ru_file = 'ru.json'
+    if os.path.exists(ru_file):
+        try:
+            with open(ru_file, 'r', encoding='utf-8') as f:
+                existing_translations = json.load(f)
+        except Exception as e:
+            print(f"Error reading existing {ru_file}: {e}")
 
-    # Write to ru.json
-    os.makedirs('ru', exist_ok=True)
-    with open('ru/ru.json', 'w', encoding='utf-8') as f:
-        json.dump(translations, f, ensure_ascii=False, indent=4)
+    # Add new strings that are not already in existing translations
+    new_count = 0
+    for text in filtered_strings:
+        if text not in existing_translations:
+            existing_translations[text] = ""
+            new_count += 1
 
-    print(f"Generated ru.json with {len(translations)} entries")
+    # Write updated ru.json
+    with open(ru_file, 'w', encoding='utf-8') as f:
+        json.dump(existing_translations, f, ensure_ascii=False, indent=4, sort_keys=True)
+
+    print(f"Updated ru.json: added {new_count} new entries, total {len(existing_translations)} entries")
 
 if __name__ == "__main__":
     main()

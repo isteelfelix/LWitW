@@ -21,7 +21,15 @@ namespace LWitWMod
 
         public override void OnInitializeMelon()
         {
-            MelonLogger.Msg("[LWitWMod] LWitWMod loaded!");
+            // Disable TMP warnings using reflection
+            var settingsType = typeof(TMPro.TMP_Settings);
+            var warningsDisabledField = settingsType.GetField("warningsDisabled", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
+            if (warningsDisabledField != null)
+            {
+                warningsDisabledField.SetValue(null, true);
+            }
+
+            // MelonLogger.Msg("[LWitWMod] LWitWMod loaded!");
 
             // Load ru.json translations first (so Translate is available)
             try
@@ -29,7 +37,7 @@ namespace LWitWMod
                 string modPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
                 string ruJsonPath = Path.Combine(modPath, "ru.json");
                 Translation = new Translation(ruJsonPath);
-                MelonLogger.Msg($"Loaded translations: {Translation.Count} entries");
+                // MelonLogger.Msg($"Loaded translations: {Translation.Count} entries");
             }
             catch (Exception ex)
             {
@@ -47,11 +55,11 @@ namespace LWitWMod
                 string bundlePath = Path.Combine(gameRoot, "Mods", "font", "cyrillicfont.bundle");
                 if (!File.Exists(bundlePath))
                 {
-                    MelonLogger.Msg($"AssetBundle not found at: {bundlePath}");
+                    // MelonLogger.Msg($"AssetBundle not found at: {bundlePath}");
                     return;
                 }
 
-                MelonLogger.Msg($"Loading AssetBundle from: {bundlePath}");
+                // MelonLogger.Msg($"Loading AssetBundle from: {bundlePath}");
                 var bundle = AssetBundle.LoadFromFile(bundlePath);
                 if (bundle == null)
                 {
@@ -59,16 +67,16 @@ namespace LWitWMod
                     return;
                 }
 
-                MelonLogger.Msg("AssetBundle loaded successfully");
+                // MelonLogger.Msg("AssetBundle loaded successfully");
                 var names = bundle.GetAllAssetNames();
-                MelonLogger.Msg("Assets in bundle: " + string.Join(", ", names.Select(n => Path.GetFileName(n))));
+                // MelonLogger.Msg("Assets in bundle: " + string.Join(", ", names.Select(n => Path.GetFileName(n))));
 
                 // Prefer named TMP_FontAsset, then any TMP_FontAsset, then TTF fallback
                 TMP_FontAsset fontAsset = null;
                 foreach (var n in names.Where(x => x.IndexOf("noto", StringComparison.OrdinalIgnoreCase) >= 0 || x.IndexOf("notosans", StringComparison.OrdinalIgnoreCase) >= 0))
                 {
                     try { fontAsset = bundle.LoadAsset<TMP_FontAsset>(n); } catch { fontAsset = null; }
-                    if (fontAsset != null) { MelonLogger.Msg($"Found preferred TMP_FontAsset in bundle: {fontAsset.name}"); break; }
+                    if (fontAsset != null) { /* MelonLogger.Msg($"Found preferred TMP_FontAsset in bundle: {fontAsset.name}"); */ break; }
                 }
 
                 if (fontAsset == null)
@@ -76,7 +84,7 @@ namespace LWitWMod
                     foreach (var n in names)
                     {
                         try { fontAsset = bundle.LoadAsset<TMP_FontAsset>(n); } catch { fontAsset = null; }
-                        if (fontAsset != null) { MelonLogger.Msg($"Found TMP_FontAsset in bundle: {fontAsset.name}"); break; }
+                        if (fontAsset != null) { /* MelonLogger.Msg($"Found TMP_FontAsset in bundle: {fontAsset.name}"); */ break; }
                     }
                 }
 
@@ -86,7 +94,7 @@ namespace LWitWMod
                     foreach (var n in names.Where(x => x.EndsWith(".ttf", StringComparison.OrdinalIgnoreCase) || x.EndsWith(".otf", StringComparison.OrdinalIgnoreCase)))
                     {
                         try { ttf = bundle.LoadAsset<Font>(n); } catch { ttf = null; }
-                        if (ttf != null) { MelonLogger.Msg($"Found font file in bundle: {ttf.name}"); break; }
+                        if (ttf != null) { /* MelonLogger.Msg($"Found font file in bundle: {ttf.name}"); */ break; }
                     }
                 }
 
@@ -99,7 +107,7 @@ namespace LWitWMod
                         if (mat != null)
                         {
                             RuntimeCache.LoadedCyrillicMaterial = mat;
-                            MelonLogger.Msg($"Found Material in bundle: {mat.name}");
+                            /* MelonLogger.Msg($"Found Material in bundle: {mat.name}"); */
                             break;
                         }
                     }
@@ -118,7 +126,7 @@ namespace LWitWMod
                         if (tex != null)
                         {
                             RuntimeCache.LoadedCyrillicAtlas = tex;
-                            MelonLogger.Msg($"Found preferred PNG atlas in bundle: {tex.name}");
+                            /* MelonLogger.Msg($"Found preferred PNG atlas in bundle: {tex.name}"); */
                         }
                     }
                     catch { }
@@ -136,7 +144,7 @@ namespace LWitWMod
                             if (tex != null)
                             {
                                 RuntimeCache.LoadedCyrillicAtlas = tex;
-                                MelonLogger.Msg($"Found PNG atlas in bundle: {tex.name}");
+                                /* MelonLogger.Msg($"Found PNG atlas in bundle: {tex.name}"); */
                             }
                         }
                         catch { }
@@ -154,7 +162,7 @@ namespace LWitWMod
                             if (tex != null)
                             {
                                 RuntimeCache.LoadedCyrillicAtlas = tex;
-                                MelonLogger.Msg($"Found Texture2D in bundle: {tex.name}");
+                                /* MelonLogger.Msg($"Found Texture2D in bundle: {tex.name}"); */
                                 break;
                             }
                         }
@@ -177,11 +185,11 @@ namespace LWitWMod
                         {
                             RuntimeCache.LoadedCyrillicFont = created;
                             RuntimeCache.LoadedBundle = bundle;
-                            MelonLogger.Msg($"Created runtime TMP_FontAsset from {ttf.name}");
+                            /* MelonLogger.Msg($"Created runtime TMP_FontAsset from {ttf.name}"); */
                         }
                         else
                         {
-                            MelonLogger.Msg("Created TMP_FontAsset from TTF but it appears unusable");
+                            /* MelonLogger.Msg("Created TMP_FontAsset from TTF but it appears unusable"); */
                             bundle.Unload(false);
                         }
                     }
@@ -194,12 +202,12 @@ namespace LWitWMod
                 else if (fontAsset != null)
                 {
                     // found a TMP_FontAsset but it seems unusable
-                    MelonLogger.Msg($"Found TMP_FontAsset '{fontAsset.name}' but it appears unusable (missing atlas/glyphs)");
+                    /* MelonLogger.Msg($"Found TMP_FontAsset '{fontAsset.name}' but it appears unusable (missing atlas/glyphs)"); */
                     bundle.Unload(false);
                 }
                 else
                 {
-                    MelonLogger.Msg("No TMP_FontAsset or TTF found in bundle");
+                    /* MelonLogger.Msg("No TMP_FontAsset or TTF found in bundle"); */
                     bundle.Unload(false);
                 }
 
@@ -244,7 +252,9 @@ namespace LWitWMod
                         FontHelpers.ApplyCyrillicMaterialToAllFonts(RuntimeCache.LoadedCyrillicFont.material);
                         count++;
                         if (count % 10 == 0) // log every 10 times to avoid spam
-                            MelonLogger.Msg($"Periodic re-apply #{count}: applied Cyrillic font and material globally");
+                        {
+                            /* MelonLogger.Msg($"Periodic re-apply #{count}: applied Cyrillic font and material globally"); */
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -301,7 +311,7 @@ namespace LWitWMod
                         injected++;
                     }
                 }
-                MelonLogger.Msg($"Injected Cyrillic fallback into {injected} TMP_FontAsset(s)");
+                /* MelonLogger.Msg($"Injected Cyrillic fallback into {injected} TMP_FontAsset(s)"); */
             }
             catch (Exception ex)
             {
@@ -340,7 +350,7 @@ namespace LWitWMod
                         {
                             if (current.fallbackFontAssetTable == null) current.fallbackFontAssetTable = new List<TMP_FontAsset>();
                             current.fallbackFontAssetTable.Add(RuntimeCache.LoadedCyrillicFont);
-                            MelonLogger.Msg($"Added LoadedCyrillicFont as fallback to font '{current.name}' for object '{__instance.gameObject.name}'");
+                            /* MelonLogger.Msg($"Added LoadedCyrillicFont as fallback to font '{current.name}' for object '{__instance.gameObject.name}'"); */
                         }
                         catch (Exception ex)
                         {
@@ -378,7 +388,7 @@ namespace LWitWMod
                     ApplyCyrillicToText(tt);
                     applied++;
                 }
-                MelonLogger.Msg($"Globally applied Cyrillic font to {applied} TMP_Text(s), {alreadyCyrillic} already had it, total {existingRaw.Length}");
+                /* MelonLogger.Msg($"Globally applied Cyrillic font to {applied} TMP_Text(s), {alreadyCyrillic} already had it, total {existingRaw.Length}"); */
             }
             catch (Exception ex)
             {
@@ -400,7 +410,7 @@ namespace LWitWMod
                     fa.material = cyrMat;
                     applied++;
                 }
-                MelonLogger.Msg($"Applied Cyrillic material to {applied} TMP_FontAsset(s)");
+                /* MelonLogger.Msg($"Applied Cyrillic material to {applied} TMP_FontAsset(s)"); */
             }
             catch (Exception ex)
             {
@@ -477,7 +487,7 @@ namespace LWitWMod
                 MelonLogger.Warning($"Could not find method 'SetTextLocale' in type '{type.FullName}'");
                 return null;
             }
-            MelonLogger.Msg($"Found SunnySideUp.LocalizationSetter.SetTextLocale: {method}");
+            /* MelonLogger.Msg($"Found SunnySideUp.LocalizationSetter.SetTextLocale: {method}"); */
             return method;
         }
 
@@ -489,7 +499,7 @@ namespace LWitWMod
                 try
                 {
                     FontHelpers.ApplyCyrillicGlobally(RuntimeCache.LoadedCyrillicFont);
-                    MelonLogger.Msg("Re-applied Cyrillic font after LocalizationSetter.SetTextLocale");
+                    /* MelonLogger.Msg("Re-applied Cyrillic font after LocalizationSetter.SetTextLocale"); */
                 }
                 catch (Exception ex)
                 {
@@ -515,7 +525,7 @@ namespace LWitWMod
             if (RuntimeCache.LoadedCyrillicFont != null && FontHelpers.IsFontAssetUsable(RuntimeCache.LoadedCyrillicFont) && value != RuntimeCache.LoadedCyrillicFont)
             {
                 value = RuntimeCache.LoadedCyrillicFont;
-                MelonLogger.Msg($"Forced Cyrillic font on TMP_Text '{__instance.gameObject.name}' instead of '{value?.name ?? "null"}'");
+                /* MelonLogger.Msg($"Forced Cyrillic font on TMP_Text '{__instance.gameObject.name}' instead of '{value?.name ?? "null"}'"); */
             }
             return true;
         }
@@ -537,7 +547,7 @@ namespace LWitWMod
             if (RuntimeCache.LoadedCyrillicFont != null && value != RuntimeCache.LoadedCyrillicFont.material)
             {
                 value = RuntimeCache.LoadedCyrillicFont.material;
-                MelonLogger.Msg($"Forced Cyrillic material on TMP_Text '{__instance.gameObject.name}' instead of '{value?.name ?? "null"}'");
+                /* MelonLogger.Msg($"Forced Cyrillic material on TMP_Text '{__instance.gameObject.name}' instead of '{value?.name ?? "null"}'"); */
             }
             return true;
         }
